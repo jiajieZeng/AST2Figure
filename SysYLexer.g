@@ -28,7 +28,7 @@ RBRACK        : ']';
 COMMA         : ',';
 SEMICOLON     : ';';
 ASSIGN        : '=';
-DOT	      : '.';
+DOT              : '.';
 
 // Define tokens for keywords
 CONST         : 'const';
@@ -46,37 +46,37 @@ RETURN        : 'return';
 IDENTIFIER    : [a-zA-Z_] [a-zA-Z0-9_]*;
 
 DECIMAL_CONST : NONZERO_DIGIT (DIGIT)*;
-OCTAL_CONST	: '0' (OCTAL_DIGIT)*;
-HEX_CONST	: HEX_PREFIX (HEX_DIGIT)+;
+OCTAL_CONST        : '0' (OCTAL_DIGIT)*;
+HEX_CONST        : HEX_PREFIX (HEX_DIGIT)+;
 
 HEX_PREFIX : '0X'
-			| '0x';
+                        | '0x';
 NONZERO_DIGIT : [1-9];
 OCTAL_DIGIT : [0-7];
-DIGIT		: '0'
-			| NONZERO_DIGIT;
+DIGIT                : '0'
+                        | NONZERO_DIGIT;
 HEX_DIGIT : [a-fA-F] 
-			| DIGIT;
+                        | DIGIT;
 
 DECIMAL_FLOATING_CONST : FRACTIONAL_CONST (EXPONENT_PART)?
-						| DIGIT_SEQUENCE EXPONENT_PART;
+                                                | DIGIT_SEQUENCE EXPONENT_PART;
 
 FRACTIONAL_CONST : (DIGIT_SEQUENCE)? DOT DIGIT_SEQUENCE
-					| DIGIT_SEQUENCE DOT;
+                                        | DIGIT_SEQUENCE DOT;
 
 EXPONENT_PART : ('E' | 'e') ((ADD | SUB)?) DIGIT_SEQUENCE;
 
 DIGIT_SEQUENCE : DIGIT+;
 
 HEX_FLOATING_CONST: HEX_PREFIX HEX_FRACTIONAL_CONST BINARY_EXPONENT_PART
-					| HEX_PREFIX HEX_DIGIT_SEQUENCE BINARY_EXPONENT_PART;
+                                        | HEX_PREFIX HEX_DIGIT_SEQUENCE BINARY_EXPONENT_PART;
 
 HEX_FRACTIONAL_CONST : (HEX_DIGIT_SEQUENCE)? DOT HEX_DIGIT_SEQUENCE
-						| HEX_DIGIT_SEQUENCE DOT;
+                                                | HEX_DIGIT_SEQUENCE DOT;
 
-HEX_DIGIT_SEQUENCE	: HEX_DIGIT+;
+HEX_DIGIT_SEQUENCE        : HEX_DIGIT+;
 
-BINARY_EXPONENT_PART	: ('P' | 'p') ((ADD | SUB)?) DIGIT_SEQUENCE;
+BINARY_EXPONENT_PART        : ('P' | 'p') ((ADD | SUB)?) DIGIT_SEQUENCE;
 
 
 
@@ -86,3 +86,4 @@ WS            : [ \t\r\n] -> skip;
 // Define tokens for comments
 SINGLE_LINE_COMMENT : '//' ~[\r\n]* -> skip;
 MULTI_LINE_COMMENT  : '/*' .*? '*/' -> skip;
+

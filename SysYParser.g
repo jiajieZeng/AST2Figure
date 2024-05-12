@@ -8,12 +8,12 @@ options {
 compUnit    : (decl | funcDef)+;
 
 decl         : constDecl 
-				      | varDecl;
+             | varDecl;
 
 constDecl    : CONST bType constDef (COMMA constDef)* SEMICOLON;
 
 bType        : INT 
-				      | FLOAT;
+                                      | FLOAT;
 
 constDef     : ident (LBRACK constExp RBRACK)* ASSIGN constInitVal;
 
@@ -21,10 +21,10 @@ constInitVal : constExp | LBRACE (constInitVal (COMMA constInitVal)*)? RBRACE;
 
 varDecl      : bType varDef (COMMA varDef)* SEMICOLON;
 
-varDef       : ident (LBRACK constExp RBRACK)? (ASSIGN initVal)?;
+varDef       : ident (LBRACK constExp RBRACK)* (ASSIGN initVal)?;
 
 initVal      : exp 
-				      | LBRACE (initVal (COMMA initVal)*)? RBRACE;
+                                      | LBRACE (initVal (COMMA initVal)*)? RBRACE;
 
 funcDef      : funcType ident LPAREN (funcFParams)? RPAREN block;
 
@@ -47,46 +47,37 @@ stmt         : lVal ASSIGN exp SEMICOLON
              | CONTINUE SEMICOLON
              | RETURN (exp)? SEMICOLON;
 
-exp          : addExp;
+constExp      : exp;
 
-cond         : lOrExp;
+exp          : LPAREN exp RPAREN
+              | lVal
+              | number
+              | ident LPAREN (funcRParams)? RPAREN
+              | unaryOp exp
+              | exp (op=(MUL | DIV | MOD)) exp
+              | exp (op=(ADD | SUB)) exp;
+
+cond         : exp
+              | cond (op=(LT | GT | LE | GE)) cond
+              | cond (op=(EQ | NEQ)) cond
+              | cond op=AND cond
+              | cond op=OR cond;
 
 lVal         : ident (LBRACK exp RBRACK)*;
 
-primaryExp   : LPAREN exp RPAREN | lVal | number;
-
-unaryExp     : primaryExp
-             | ident LPAREN (funcRParams)? RPAREN
-             | unaryOp unaryExp;
-
 number       : intConst 
-			        | floatConst;
+              | floatConst;
 
 
-intConst	: DECIMAL_CONST
-			    | OCTAL_CONST
-			    | HEX_CONST;
+intConst        : DECIMAL_CONST
+                            | OCTAL_CONST
+                            | HEX_CONST;
 
-floatConst	: DECIMAL_FLOATING_CONST
-			      | HEX_FLOATING_CONST;
+floatConst        : DECIMAL_FLOATING_CONST
+                              | HEX_FLOATING_CONST;
 
 unaryOp      : ADD | SUB | NOT;
 
 funcRParams  : exp (COMMA exp)*;
 
-mulExp      : unaryExp (op=(MUL|DIV|MOD) unaryExp)*;
-
-addExp      : mulExp (op=(ADD|SUB) mulExp)*;
-
-relExp      : addExp (op=(LT|GT|LE|GE) addExp)*;
-
-eqExp       : relExp (op=(EQ|NEQ) relExp)*;
-
-lAndExp     : eqExp (op=AND eqExp)*;
-
-lOrExp       : lAndExp (op=OR lAndExp)*;
-
-constExp     : addExp;
-
 ident        : IDENTIFIER;
-
